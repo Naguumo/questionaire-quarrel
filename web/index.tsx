@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
+import 'normalize.css';
 import socketClient from './utils/socketClient';
 
 const App = () => {

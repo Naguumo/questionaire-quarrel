@@ -1,15 +1,19 @@
 import { io } from 'socket.io-client';
 
-const socketURL =
-  window.location.hostname === 'localhost'
-    ? 'ws://localhost:8000'
-    : 'wss://questionaire-quarrel.herokuapp.com';
+const socketURLList: Record<string, string> = {
+  'localhost': 'ws://localhost:8000',
+  'questionaire-quarrel.herokuapp.com':
+    'wss://questionaire-quarrel.herokuapp.com',
+};
+const socketURL = socketURLList[window.location.hostname];
 
 class Socket {
   socket;
 
   constructor() {
-    this.socket = io(socketURL, { transports: ['websocket'] });
+    this.socket = io(socketURL, {
+      transports: ['websocket'],
+    });
   }
 
   getSocket() {
