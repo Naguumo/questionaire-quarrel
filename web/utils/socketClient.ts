@@ -1,4 +1,4 @@
-import { io } from 'socket.io-client';
+import { io } from 'socket.io-client'; // Websocket Client - https://socket.io/
 
 const socketURLList: Record<string, string> = {
   'localhost': 'ws://localhost:8000',

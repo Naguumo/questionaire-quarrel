@@ -1,37 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import 'normalize.css';
-import socketClient from './utils/socketClient';
+import 'normalize.css'; // Remove browser default styles
+import 'primereact/resources/themes/vela-blue/theme.css'; // Theming
+import 'primereact/resources/primereact.min.css'; // Component Library - https://primefaces.org/primereact
+import 'primeicons/primeicons.css'; // Component Icons
+import 'primeflex/primeflex.css'; // Spacing utilities
+import PrimeReact from 'primereact/api';
+import { Card } from 'primereact/card';
+import { Skeleton } from 'primereact/skeleton';
+import { Global, css } from '@emotion/react'; // CSS-in-JS - https://emotion.sh
+import SocketDemo from './components/socketDemo';
 
-const App = () => {
-  const [value, setValue] = useState<string>('');
-  const [response, setResponse] = useState<unknown>(null);
+PrimeReact.ripple = true; // Enable ripple effects
 
-  useEffect(() => {
-    socketClient.getSocket().on('message', (data: unknown) => {
-      setResponse(data);
-    });
-  }, []);
+const globalStyle = css`
+  body {
+    background: var(--surface-b);
+  }
+`;
 
+const App = (): JSX.Element => {
   return (
     <>
-      <input
-        value={value}
-        onChange={event => {
-          setValue(event.target.value);
-        }}
-      />
-      <button
-        onClick={() => {
-          socketClient.getSocket().emit('message', value);
-        }}>
-        Send
-      </button>
-      <p>The Response is {response}</p>
+      <Global styles={globalStyle} />
+      <div className='p-d-flex p-jc-center p-ai-stretch p-mt-6'>
+        <Card className='p-mx-3'>
+          <SocketDemo />
+        </Card>
+        <Card className='p-mx-3'>
+          <Skeleton shape='rectangle' width='20rem' height='10rem' />
+        </Card>
+      </div>
     </>
   );
 };
 
+// Entry point for DOM manipulation - DO NOT EDIT
 ReactDOM.render(
   <React.StrictMode>
     <App />
