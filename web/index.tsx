@@ -5,13 +5,13 @@ import 'primereact/resources/themes/vela-blue/theme.css'; // Theming
 import 'primereact/resources/primereact.min.css'; // Component Library - https://primefaces.org/primereact
 import 'primeicons/primeicons.css'; // Component Icons
 import 'primeflex/primeflex.css'; // Spacing utilities
-import PrimeReact from 'primereact/api';
+// import PrimeReact from 'primereact/api'; // Currently Bugged
 import { Card } from 'primereact/card';
 import { Skeleton } from 'primereact/skeleton';
 import { Global, css } from '@emotion/react'; // CSS-in-JS - https://emotion.sh
 import SocketDemo from './components/socketDemo';
 
-PrimeReact.ripple = true; // Enable ripple effects
+// PrimeReact.ripple = true; // Enable ripple effects - Currently Bugged
 
 const globalStyle = css`
   body {
