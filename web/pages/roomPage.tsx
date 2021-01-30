@@ -1,6 +1,7 @@
 import React from 'react';
 import { route } from 'navi';
 import { css } from '@emotion/css';
+import { Card } from 'primereact/card';
 
 const roomCSS = css`
   height: 98vh;
@@ -58,14 +59,15 @@ interface RoomPageProps {
 const RoomPage = ({ id }: RoomPageProps): JSX.Element => {
   return (
     <div className={roomCSS}>
-      <div className='team-a-label'>Team A</div>
-      <div className='team-b-label'>Team B</div>
-      <div className='question-prompt'>This is Room {id}</div>
-      <div className='answer-possibilities'>Answers</div>
-      <div className='team-a-list'>Team A List</div>
-      <div className='team-b-list'>Team B List</div>
-      <div className='buzzer'>Buzzer</div>
-      <div className='settings-b'>Settings</div>
+      <Card className='team-a-label'>Team A</Card>
+      <Card className='team-b-label'>Team B</Card>
+      <Card className='question-prompt'>This is Room {id}</Card>
+      <Card className='answer-possibilities'>Answers</Card>
+      <Card className='team-a-list'>Team A List</Card>
+      <Card className='team-b-list'>Team B List</Card>
+      <Card className='buzzer'>Buzzer</Card>
+      <div className='settings-a' />
+      <Card className='settings-b'>Settings</Card>
     </div>
   );
 };
