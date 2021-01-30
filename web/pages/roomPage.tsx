@@ -67,7 +67,9 @@ const RoomPage = ({ id }: RoomPageProps): JSX.Element => {
       <Card className='team-b-list'>Team B List</Card>
       <Card className='buzzer'>Buzzer</Card>
       <div className='settings-a' />
-      <Card className='settings-b'>Settings</Card>
+      <Card className='settings-b'>
+        <i className='pi pi-cog' />
+      </Card>
     </div>
   );
 };

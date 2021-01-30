@@ -10,61 +10,50 @@ import SocketDemo from '../components/socketDemo';
 
 const LandingCSS = css`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: 1fr auto 1fr;
+  grid-template-rows: 1fr auto 1fr;
   gap: 1% 1%;
   grid-template-areas:
-    '. . . .'
-    '. center-left center-right .'
-    '. . . .';
+    'socket . .'
+    '. center .'
+    '. . .';
 
-  .center-left {
-    grid-area: center-left;
+  .socket {
+    grid-area: socket;
   }
 
-  .center-right {
-    grid-area: center-right;
+  .center {
+    grid-area: center;
   }
 `;
 
 const LandingPage = (): JSX.Element => {
   const [user, setUser] = useAtom(userAtom);
-  const [room, setRoom] = useState('');
+  const [room, setRoom] = useState<string>('');
   return (
     <div className={LandingCSS}>
-      <Card className='center-left'>
+      <Card className='socket'>
         <SocketDemo />
       </Card>
-      <Card className='center-right'>
-        <div>
-          <span className='p-float-label'>
-            <InputText
-              id='username'
-              value={user}
-              onChange={({
-                target: { value },
-              }: ChangeEvent<HTMLInputElement>) => {
-                setUser(value);
-              }}
-            />
-            <label htmlFor='username'>Username</label>
-          </span>
-        </div>
-        <div>
-          <Button label='Host' />
-        </div>
-        <div>
-          <InputText
-            value={room}
-            placeholder='Room'
-            onChange={({
-              target: { value },
-            }: ChangeEvent<HTMLInputElement>) => {
-              setRoom(value);
-            }}
-          />
-          <Button label='Join' />
-        </div>
+      <Card className='center p-fluid'>
+        <InputText
+          className='p-mb-2'
+          id='username'
+          value={user}
+          onChange={({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+            setUser(value);
+          }}
+        />
+        <Button label='Host' className='p-mb-2' />
+        <InputText
+          className='p-mb-2'
+          value={room}
+          placeholder='Room'
+          onChange={({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+            setRoom(value);
+          }}
+        />
+        <Button label='Join' />
       </Card>
     </div>
   );
