@@ -5,13 +5,15 @@ export interface IMemberInfo {
 
 export interface IGameInfo {
   teamA: {
+    name: string;
     members: [IMemberInfo];
     points: number;
   };
   teamB: {
+    name: string;
     members: [IMemberInfo];
     points: number;
   };
-  buzzedTeam: string;
+  buzzedPlayer: IMemberInfo;
   questions: [string];
 }

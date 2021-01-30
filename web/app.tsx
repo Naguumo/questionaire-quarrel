@@ -6,7 +6,7 @@ import 'primereact/resources/primereact.min.css'; // Component Library - https:/
 import 'primeicons/primeicons.css'; // Component Icons
 import 'primeflex/primeflex.css'; // Spacing utilities
 // import PrimeReact from 'primereact/api'; // Currently Bugged
-import { Global, css } from '@emotion/react'; // CSS-in-JS - https://emotion.sh
+import { injectGlobal } from '@emotion/css'; // CSS-in-JS - https://emotion.sh
 import { lazy, mount } from 'navi'; // Page Routing - https://frontarm.com/navi/en
 import { NotFoundBoundary, Router, View } from 'react-navi'; // Page Routing Components
 import { Provider } from 'jotai'; // State Management - https://github.com/pmndrs/jotai
@@ -15,7 +15,7 @@ import error404 from './pages/error404';
 // PrimeReact.ripple = true; // Enable ripple effects - Currently Bugged
 
 // App-wide CSS Styles
-const globalStyle = css`
+injectGlobal`
   body {
     background: var(--surface-b);
   }
@@ -31,7 +31,6 @@ const routes = mount({
 const App = (): JSX.Element => {
   return (
     <Provider>
-      <Global styles={globalStyle} />
       <Router routes={routes}>
         <Suspense fallback={null}>
           <NotFoundBoundary render={error404}>

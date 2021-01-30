@@ -22,7 +22,7 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["react", "@typescript-eslint"],
+  "plugins": ["react", "@typescript-eslint", "@emotion"],
   "rules": {
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single"],
