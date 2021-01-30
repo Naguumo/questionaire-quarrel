@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { route } from 'navi';
 import { Card } from 'primereact/card';
 import { InputText } from 'primereact/inputtext';
-import SocketDemo from '../components/socketDemo';
+import { Button } from 'primereact/button';
 import { useAtom } from 'jotai';
 import { userAtom } from '../utils/uiAtoms';
+import SocketDemo from '../components/socketDemo';
 
 const LandingPage = (): JSX.Element => {
   const [user, setUser] = useAtom(userAtom);
+  const [room, setRoom] = useState('');
   return (
     <>
       <div className='p-d-flex p-jc-center p-ai-stretch p-mt-6'>
@@ -15,16 +17,35 @@ const LandingPage = (): JSX.Element => {
           <SocketDemo />
         </Card>
         <Card className='p-mx-3'>
-          <span className='p-float-label'>
+          <div>
+            <span className='p-float-label'>
+              <InputText
+                id='username'
+                value={user}
+                onChange={({
+                  target: { value },
+                }: ChangeEvent<HTMLInputElement>) => {
+                  setUser(value);
+                }}
+              />
+              <label htmlFor='username'>Username</label>
+            </span>
+          </div>
+          <div>
+            <Button label='Host' />
+          </div>
+          <div>
             <InputText
-              id='username'
-              value={user}
-              onChange={({ target: { value } }) => {
-                setUser(value);
+              value={room}
+              placeholder='Room'
+              onChange={({
+                target: { value },
+              }: ChangeEvent<HTMLInputElement>) => {
+                setRoom(value);
               }}
             />
-            <label htmlFor='username'>Username</label>
-          </span>
+            <Button label='Join' />
+          </div>
         </Card>
       </div>
     </>
