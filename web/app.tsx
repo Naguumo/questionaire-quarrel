@@ -8,19 +8,23 @@ import 'primeflex/primeflex.css'; // Spacing utilities
 // import PrimeReact from 'primereact/api'; // Currently Bugged
 import { Global, css } from '@emotion/react'; // CSS-in-JS - https://emotion.sh
 import { lazy, mount } from 'navi'; // Page Routing - https://frontarm.com/navi/en
-import { Router, View } from 'react-navi'; // Page Routing Components
+import { NotFoundBoundary, Router, View } from 'react-navi'; // Page Routing Components
+import error404 from './pages/error404';
 
 // PrimeReact.ripple = true; // Enable ripple effects - Currently Bugged
 
+// App-wide CSS Styles
 const globalStyle = css`
   body {
     background: var(--surface-b);
   }
 `;
 
+// Client Side Routes
 const routes = mount({
   '/': lazy(() => import('./pages/landingPage')),
-  '/room': lazy(() => import('./pages/roomPage')),
+  '/browse': lazy(() => import('./pages/browsePage')),
+  '/room/:id': lazy(() => import('./pages/roomPage')),
 });
 
 const App = (): JSX.Element => {
@@ -29,7 +33,9 @@ const App = (): JSX.Element => {
       <Global styles={globalStyle} />
       <Router routes={routes}>
         <Suspense fallback={null}>
-          <View />
+          <NotFoundBoundary render={error404}>
+            <View />
+          </NotFoundBoundary>
         </Suspense>
       </Router>
     </>

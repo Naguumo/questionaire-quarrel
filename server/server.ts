@@ -1,7 +1,8 @@
-import express from 'express';
+import express from 'express'; // Server Framework - https://expressjs.com
 import http from 'http';
-import { Server } from 'socket.io';
 import path from 'path';
+import { Server } from 'socket.io'; // Websocket Server - https://socket.io/
+import { nanoid } from 'nanoid'; // Human Friendly Room Ids - https://github.com/ai/nanoid
 
 // Initialize server
 const server = express(); // Simple node server - https://expressjs.com
@@ -12,15 +13,18 @@ const io = new Server(httpServer); // Websockets - https://socket.io
 const PORT = process.env.PORT || 8000;
 const DEV = process.env.NODE_ENV === 'development';
 
-// Serves React production files
+// Serve React production files
 server.use(express.static(path.join(__dirname, '../dist')));
-server.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
+
+// Endpoint to create rooms (Unfinished/Temporary)
+server.get('/api/create-room', (_req, res) => {
+  const roomId = nanoid(8);
+  res.send(roomId);
 });
 
-// Endpoint to check server requests are working (Temporary)
-server.get('/servercheck', (req, res) => {
-  res.send('<h1>The Server is Running</h1>');
+// Last Route, For client side routing
+server.get('/*', (_req, res) => {
+  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 });
 
 // Websocket Event Management
@@ -39,5 +43,5 @@ io.on('connection', socket => {
 
 // Set server to listen for requests
 httpServer.listen(PORT, () => {
-  if (DEV) console.info(`Listening on http://localhost:${PORT}`);
+  DEV && console.info(`Listening on http://localhost:${PORT}`);
 });
