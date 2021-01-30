@@ -5,7 +5,7 @@ import { Server } from 'socket.io'; // Websocket Server - https://socket.io/
 import { nanoid } from 'nanoid'; // Human Friendly Room Ids - https://github.com/ai/nanoid
 
 // Initialize server
-const server = express(); // Simple node server - https://expressjs.com
+const server = express();
 const httpServer = http.createServer(server);
 const io = new Server(httpServer); // Websockets - https://socket.io
 
