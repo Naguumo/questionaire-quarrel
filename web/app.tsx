@@ -9,6 +9,7 @@ import 'primeflex/primeflex.css'; // Spacing utilities
 import { Global, css } from '@emotion/react'; // CSS-in-JS - https://emotion.sh
 import { lazy, mount } from 'navi'; // Page Routing - https://frontarm.com/navi/en
 import { NotFoundBoundary, Router, View } from 'react-navi'; // Page Routing Components
+import { Provider } from 'jotai'; // State Management - https://github.com/pmndrs/jotai
 import error404 from './pages/error404';
 
 // PrimeReact.ripple = true; // Enable ripple effects - Currently Bugged
@@ -29,7 +30,7 @@ const routes = mount({
 
 const App = (): JSX.Element => {
   return (
-    <>
+    <Provider>
       <Global styles={globalStyle} />
       <Router routes={routes}>
         <Suspense fallback={null}>
@@ -38,7 +39,7 @@ const App = (): JSX.Element => {
           </NotFoundBoundary>
         </Suspense>
       </Router>
-    </>
+    </Provider>
   );
 };
 

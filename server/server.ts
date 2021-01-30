@@ -16,7 +16,7 @@ const DEV = process.env.NODE_ENV === 'development';
 // Serve React production files
 server.use(express.static(path.join(__dirname, '../dist')));
 
-// Endpoint to create rooms (Unfinished/Temporary)
+// Endpoint to create rooms - Unfinished/Temporary
 server.get('/api/create-room', (_req, res) => {
   const roomId = nanoid(8);
   res.send(roomId);
@@ -29,15 +29,16 @@ server.get('/*', (_req, res) => {
 
 // Websocket Event Management
 io.on('connection', socket => {
-  console.info('User connected');
+  console.info(`Socket(${socket.id}) connected`);
 
+  // Simple Example - Temporary
   socket.on('message', (message: string) => {
     console.log(`Message: ${message}`);
     io.emit('message', message);
   });
 
   socket.on('disconnect', () => {
-    console.info('User disconnected');
+    console.info(`Socket(${socket.id}) disconnected`);
   });
 });
 
