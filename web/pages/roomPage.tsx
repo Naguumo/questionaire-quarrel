@@ -2,6 +2,7 @@ import React from 'react';
 import { route } from 'navi';
 import { css } from '@emotion/css';
 import { Card } from 'primereact/card';
+import { socket } from '../utils/socket';
 
 const roomCSS = css`
   height: 98vh;
@@ -13,7 +14,7 @@ const roomCSS = css`
   grid-template-areas:
     'team-a-label question-prompt team-b-label'
     'team-a-list answer-possibilities team-b-list'
-    'settings-a buzzer settings-b';
+    'information buzzer settings';
 
   .team-a-label {
     grid-area: team-a-label;
@@ -43,12 +44,12 @@ const roomCSS = css`
     grid-area: buzzer;
   }
 
-  .settings-a {
-    grid-area: settings-a;
+  .information {
+    grid-area: information;
   }
 
-  .settings-b {
-    grid-area: settings-b;
+  .settings {
+    grid-area: settings;
   }
 `;
 
@@ -66,8 +67,8 @@ const RoomPage = ({ id }: RoomPageProps): JSX.Element => {
       <Card className='team-a-list'>Team A List</Card>
       <Card className='team-b-list'>Team B List</Card>
       <Card className='buzzer'>Buzzer</Card>
-      <div className='settings-a' />
-      <Card className='settings-b'>
+      <Card className='information' />
+      <Card className='settings'>
         <i className='pi pi-cog' />
       </Card>
     </div>
@@ -75,5 +76,6 @@ const RoomPage = ({ id }: RoomPageProps): JSX.Element => {
 };
 
 export default route(async ({ params: { id } }) => {
+  socket.emit('user', { room: id });
   return { view: <RoomPage id={id} /> };
 });

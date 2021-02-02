@@ -43,9 +43,4 @@ const App = (): JSX.Element => {
 };
 
 // Entry point for DOM manipulation - DO NOT EDIT
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+ReactDOM.render(<App />, document.getElementById('root'));
