@@ -1,6 +1,7 @@
 import { Server } from 'socket.io';
 import { DEV } from './environment';
-import { IUserInfo, userList } from './roomService';
+import { userList } from './roomService';
+import { IUserInfo } from '../utils/types';
 
 export const socketActions = (io: Server): void => {
   io.on('connection', socket => {
@@ -10,11 +11,8 @@ export const socketActions = (io: Server): void => {
     socket.on('user', (user: Partial<IUserInfo>) => {
       DEV && console.log(`Changing user ${socket.id} with data`, user);
       userList.set(socket.id, { ...user });
-    });
 
-    socket.on('room', (room: string) => {
-      DEV && console.log(`${socket.id} is entering room ${room}`);
-      userList.set(socket.id, { room });
+      if (user) io.emit('roomState', userList.getRoom(socket.id));
     });
 
     socket.on('disconnect', () => {

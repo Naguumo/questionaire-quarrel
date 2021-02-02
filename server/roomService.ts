@@ -1,52 +1,42 @@
-export interface IRoomInfo {
-  teamA: {
-    name: string;
-    memberIds: Array<string>;
-    points: number;
-  };
-  teamB: {
-    name: string;
-    memberIds: Array<string>;
-    points: number;
-  };
-  buzzedPlayer?: string;
-  questions?: Array<string>;
-}
-
-export interface IUserInfo {
-  readonly socket: string;
-  username?: string;
-  room?: string;
-}
+import { nanoid } from 'nanoid'; // Human Friendly Room Ids - https://github.com/ai/nanoid
+import { DEV } from './environment';
+import { IRoomInfo, IUserInfo } from '../utils/types';
 
 class RoomList {
   private record: Record<string, IRoomInfo> = {};
 
+  private all() {
+    DEV && console.log(this.record);
+  }
+
   add(room: string) {
     this.record[room] = {
-      teamA: { name: 'Team 1', memberIds: [], points: 0 },
-      teamB: { name: 'Team 2', memberIds: [], points: 0 },
+      teamA: { name: 'Team 1', members: [], points: 0 },
+      teamB: { name: 'Team 2', members: [], points: 0 },
     };
   }
 
-  addUser(room: string, userId: string) {
-    const membersA = this.record[room].teamA.memberIds;
-    const membersB = this.record[room].teamB.memberIds;
+  addUser(room: string, user: string) {
+    if (!this.record[room]) this.add(room);
+
+    const membersA = this.record[room].teamA.members;
+    const membersB = this.record[room].teamB.members;
 
     if (membersA.length <= membersB.length)
-      this.record[room].teamA.memberIds = [...membersA, userId];
-    else this.record[room].teamA.memberIds = [...membersB, userId];
+      this.record[room].teamA.members = [...membersA, user];
+    else this.record[room].teamA.members = [...membersB, user];
   }
 
   get(room: string) {
+    this.all();
     return this.record[room];
   }
 
   set(room: string, data: Partial<IRoomInfo>) {
     this.record[room] = { ...this.record[room], ...data };
     if (
-      this.record[room].teamA.memberIds.length === 0 &&
-      this.record[room].teamB.memberIds.length === 0
+      this.record[room].teamA.members.length === 0 &&
+      this.record[room].teamB.members.length === 0
     )
       return this.remove(room);
     return this.record[room];
@@ -58,14 +48,22 @@ class RoomList {
     return data;
   }
 
-  removeUser(room: string, userId: string) {
-    const membersA = this.record[room].teamA.memberIds;
-    const membersB = this.record[room].teamB.memberIds;
+  removeUser(room: string, user: string) {
+    const membersA = this.record[room].teamA.members;
+    const membersB = this.record[room].teamB.members;
 
-    if (membersA.indexOf(userId) !== -1)
-      this.record[room].teamA.memberIds.splice(membersA.indexOf(userId));
-    if (membersB.indexOf(userId) !== -1)
-      this.record[room].teamB.memberIds.splice(membersB.indexOf(userId));
+    if (membersA.indexOf(user) !== -1)
+      this.record[room].teamA.members.splice(membersA.indexOf(user));
+    if (membersB.indexOf(user) !== -1)
+      this.record[room].teamB.members.splice(membersB.indexOf(user));
+
+    if (
+      this.record[room].teamA.members.length === 0 &&
+      this.record[room].teamB.members.length === 0
+    ) {
+      return this.remove(room);
+    }
+    return this.record[room];
   }
 }
 
@@ -73,11 +71,20 @@ class UserList {
   private record: Record<string, IUserInfo> = {};
 
   add(socketId: string) {
-    this.record[socketId] = { socket: socketId };
+    this.record[socketId] = {
+      socket: socketId,
+      username: `Player${nanoid(8)}`,
+    };
   }
 
   get(socketId: string) {
     return this.record[socketId];
+  }
+
+  getRoom(socketId: string) {
+    const { room } = this.record[socketId];
+    if (room !== undefined) return roomList.get(room);
+    return undefined;
   }
 
   set(socketId: string, data: Partial<IUserInfo>) {
@@ -85,15 +92,18 @@ class UserList {
 
     this.record[socketId] = { ...this.record[socketId], ...data };
 
-    const { room } = this.record[socketId];
+    const { username, room } = this.record[socketId];
     if (room !== oldRoom && oldRoom !== undefined)
-      roomList.removeUser(oldRoom, socketId);
+      roomList.removeUser(oldRoom, username);
     if (room !== oldRoom && room !== undefined)
-      roomList.addUser(room, socketId);
+      roomList.addUser(room, username);
+
+    return this.record[socketId];
   }
 
   remove(socketId: string) {
     const data = this.record[socketId];
+    data.room && roomList.removeUser(data.room, data.username);
     delete this.record[socketId];
     return data;
   }

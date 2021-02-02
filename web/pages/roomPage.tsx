@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { route } from 'navi';
 import { css } from '@emotion/css';
 import { Card } from 'primereact/card';
 import { socket } from '../utils/socket';
+import { IRoomInfo } from '../../utils/types';
 
 const roomCSS = css`
   height: 98vh;
@@ -58,14 +59,33 @@ interface RoomPageProps {
 }
 
 const RoomPage = ({ id }: RoomPageProps): JSX.Element => {
+  const [data, setData] = useState<Partial<IRoomInfo>>();
+  useEffect(() => {
+    socket.on('roomState', (room: Partial<IRoomInfo>) => {
+      setData(room);
+      console.log('Hello', room);
+    });
+  }, []);
   return (
     <div className={roomCSS}>
-      <Card className='team-a-label'>Team A</Card>
-      <Card className='team-b-label'>Team B</Card>
+      <Card className='team-a-label'>
+        {data?.teamA?.name} - Points: {data?.teamA?.points}
+      </Card>
+      <Card className='team-b-label'>
+        {data?.teamB?.name} - Points: {data?.teamB?.points}
+      </Card>
       <Card className='question-prompt'>This is Room {id}</Card>
       <Card className='answer-possibilities'>Answers</Card>
-      <Card className='team-a-list'>Team A List</Card>
-      <Card className='team-b-list'>Team B List</Card>
+      <Card className='team-a-list'>
+        {data?.teamA?.members.map(val => (
+          <p key={val}>{val}</p>
+        ))}
+      </Card>
+      <Card className='team-b-list'>
+        {data?.teamB?.members.map(val => (
+          <p key={val}>{val}</p>
+        ))}
+      </Card>
       <Card className='buzzer'>Buzzer</Card>
       <Card className='information' />
       <Card className='settings'>
